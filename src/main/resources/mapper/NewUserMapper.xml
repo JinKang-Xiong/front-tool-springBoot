@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.usercenter2.mapper.UserMapper">
+
+<!--    IPage<User> searchUser(IPage<User> userIPage,@Param("user") User user);-->
+    <select id="searchUser" resultType="User">
+        select * from u_user
+        <where>
+            <if test="user.username !='' and user.username!=null">
+                username=#{user.username}
+            </if>
+            <if test="user.userAccount != '' and user.userAccount != null">
+                and user_account=#{user.userAccount}
+            </if>
+            <if test="user.email != '' and user.email != null">
+                and email=#{user.email}
+            </if>
+            <if test="user.phone != '' and user.phone != null">
+                and phone=#{user.phone}
+            </if>
+            <if test="true">
+                and status_delete=0
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+
+
+<!--    Integer updateUserStatusById(@Param("id") Long id ,@Param("userStatus") Integer userStatus);    <update id="updateUserStatusById">-->
+    <update id="updateUserStatusById">
+        update u_user set user_status=#{userStatus} where id=#{id}
+    </update>
+
+<!--        Integer querycount(@Param("beginTime") Date beginTime,@Param("endTime") Date endTime);-->
+    <select id="queryUserByTime" resultType="User">
+        select * from u_user
+        <where>
+            <if test="endTime != null and endTime!='' and beginTime != null and beginTime!=''">
+                create_time between #{beginTime} and #{endTime}
+            </if>
+            <if test="beginTime ==null and beginTime== '' and endTime != null and endTime !='' ">
+                create_time like '${endTime}%'
+            </if>
+        </where>
+    </select>
+
+<!--    Integer querysumByPublicCon();-->
+    <select id="querysumByPublicCon" resultType="integer">
+        select sum(public_contribution) from u_user
+    </select>
+
+<!--    Integer queryByUserStatus();-->
+    <select id="queryByUserStatus" resultType="integer">
+        select count(*) from u_user where user_status=1
+    </select>
+
+<!--    List<User> queryByCreateTime(@Param("range") Integer range);-->
+    <select id="queryByCreateTime" resultType="User">
+        select * from u_user order by login_total desc LIMIT #{range}
+    </select>
+
+<!--    Integer updateUserAvatar(Long id,String avatarUrl);-->
+    <update id="updateUserAvatar">
+        update u_user set avatar_url=#{avatarUrl} where id=#{id}
+    </update>
+
+<!--    Integer updateBasic(@Param("id") Long id,@Param("username") String username,@Param("gender") Integer gender)-->
+    <update id="updateBasic">
+        update  u_user set username=#{username},gender=#{gender} where id=#{id}
+    </update>
+
+<!--    User findUserById(@Param("id") Long id);-->
+    <select id="findUserById" resultType="User">
+        select * from u_user where id=#{id}
+    </select>
+
+<!--    Integer updateUserPassword(@Param("id") Long id,@Param("oldPassword") String oldPassword,@Param("newPassword") String newPassword,@Param("checkNewPassword") String checkNewPassword)-->
+    <update id="updateUserPassword">
+        update u_user set user_password=#{newPassword} where id=#{id}
+    </update>
+
+<!--    Integer updateUserEmail(@Param("id")Long id,@Param("email") String email);-->
+    <update id="updateUserEmail">
+        update u_user set email=#{email} where id=#{id}
+    </update>
+
+<!--    Integer updateUserPhone(@Param("id") Long id,@Param("phone") String phone);-->
+    <update id="updateUserPhone">
+        update u_user set phone=#{phone} where id=#{id}
+    </update>
+
+<!--    Integer updateUserPasswordByEmail(@Param("email") String email,@Param("password") String password);-->
+    <update id="updateUserPasswordByEmail">
+        update u_user set user_password=#{password} where email=#{email}
+    </update>
+
+</mapper>

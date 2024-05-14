@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.usercenter2.mapper.BigManagerMapper">
+    <!--    Integer updateAvatarUrl(@Param("id") Long id,@Param("newFileName") String newFileName);-->
+    <update id="updateAvatarUrl">
+        update u_big_manager set avatar_url=#{newFileName} where id=#{id}
+    </update>
+
+<!--    Integer updateBasic(@Param("bigmanager") BigManager bigManager);-->
+    <update id="updateBasic">
+        update u_big_manager set big_manager_name=#{bigmanager.bigManagerName},age=#{bigmanager.age},gender=#{bigmanager.gender}
+        where id=#{bigmanager.id}
+    </update>
+
+<!--    Integer updatePasswordById(@Param("id") Long id,@Param("oldPassword") String oldPassword,@Param("newPassword") String newPassword);-->
+    <update id="updatePasswordById">
+        update u_big_manager set big_manager_password=#{newPassword}
+        where id=#{id} and big_manager_password=#{oldPassword}
+    </update>
+
+<!--    Integer insertBigManager(@Param("bigManager") BigManager bigManager);-->
+    <insert id="insertBigManager">
+        insert into u_big_manager (big_manager_name,big_manager_account,avatar_url,gender,age,big_manager_password,email,phone)
+        values (#{bigManager.bigManagerName},#{bigManager.bigManagerAccount},#{bigManager.avatarUrl},#{bigManager.gender},
+                #{bigManager.age},#{bigManager.bigManagerPassword},#{bigManager.email},#{bigManager.phone}
+        )
+    </insert>
+
+<!--    IPage<BigManagerVo> searchBigManager(IPage<BigManagerVo> bigManagerIPage, @Param("bigManager") BigManager bigManager);-->
+    <select id="searchBigManager" resultType="com.example.usercenter2.vo.BigManagerVo">
+        select id,big_manager_name,big_manager_account,avatar_url,avatar_status,gender,age,email,phone,create_time,update_time,manager_role from u_big_manager
+        <where>
+            <if test="bigManager.bigManagerName !='' and bigManager.bigManagerName!=null">
+                big_manager_name=#{bigManager.bigManagerName}
+            </if>
+            <if test="bigManager.bigManagerAccount != '' and bigManager.bigManagerAccount != null">
+                and big_manager_account=#{bigManager.bigManagerAccount}
+            </if>
+            <if test="bigManager.email != '' and bigManager.email != null">
+                and email=#{bigManager.email}
+            </if>
+            <if test="bigManager.phone != '' and bigManager.phone != null">
+                and phone=#{bigManager.phone}
+            </if>
+            <if test="true">
+                and manager_role=1
+            </if>
+            <if test="true">
+                and status_delete=0
+            </if>
+
+        </where>
+        order by create_time desc
+    </select>
+
+<!--    Integer updateBigManagerById(@Param("bigManager") BigManager bigManager);-->
+    <update id="updateBigManagerById">
+        update u_big_manager set big_manager_name=#{bigManager.bigManagerName},big_manager_account=#{bigManager.bigManagerAccount},
+                                 avatar_status=#{bigManager.avatarStatus},gender=#{bigManager.gender},
+                                 age=#{bigManager.age},email=#{bigManager.email},
+                                 phone=#{bigManager.phone}
+                            where id=#{bigManager.id}
+    </update>
+
+<!--    Integer deleteBigManagerById(@Param("id") Long id,@Param("statusDelete") Byte statusDelete);-->
+    <update id="deleteBigManagerById">
+        update u_big_manager set status_delete=1 where id=#{id}
+    </update>
+
+<!--    Integer querycountBigManager();-->
+    <select id="querycountBigManager" resultType="integer">
+        select count(*) from u_big_manager where manager_role=1
+    </select>
+
+<!--    Integer UpdatePasswordById(@Param("id") Long id,@Param("password") String password);-->
+    <update id="UpdatePasswordByIdAndPhone">
+        update u_big_manager set big_manager_password=#{password} where id=#{id}
+    </update>
+
+<!--    Integer updateEmailById(@Param("id") Long id,@Param("email") String email);-->
+    <update id="updateEmailById">
+        update u_big_manager set email=#{email} where id=#{id}
+    </update>
+
+<!--    BigManager queryBigManagerById(@Param("id") Long id);-->
+    <select id="queryBigManagerById" resultType="BIgManager">
+        select * from u_big_manager where id=#{id}
+    </select>
+
+<!--    Integer updatePhone(@Param("id") Long id,@Param("phone") String phone);-->
+    <update id="updatePhone">
+        update u_big_manager set phone=#{phone} where id=#{id}
+    </update>
+
+<!--    Integer updatePasswordByEmail(@Param("email") String email,@Param("password") String password)-->
+    <update id="updatePasswordByEmail">
+        update u_big_manager set big_manager_password=#{password} where email=#{email}
+    </update>
+
+</mapper>

@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/usercenter?sercerTimezone=UTC
+    username: root
+    password: xxxxxxjink #大家补充自己的
+  session:
+    timeout: 86400
+
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.usercenter2.model
+
+file:
+  upload-path: D:\MyCompletionProject\BackEndGitStore\UserCenter2\src
